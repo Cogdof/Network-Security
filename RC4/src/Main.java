@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.Scanner;
 
 public class Main {
@@ -7,15 +8,30 @@ public class Main {
         Scanner input = new Scanner(System.in);
 
         //key 입력받기
-        String key = input.nextLine();
-        System.out.println("key : "+key);
+        String keyStr = input.nextLine();
+        System.out.println("key : "+keyStr);
 
-        int S[] = new int[256];
-        int K[] = new int[256];
+        byte s[] = new byte[256];
+        byte k[] = new byte[256];
 
-        for(int i=0; i<256; i++;){
-            S[i]= i;
-            K[i]=
+        byte key[]=keyStr.getBytes();
+        System.out.println(key.length);
+
+        try{
+            File file = new File("src/plaintext.txt");
+            FileReader fileReader = new FileReader(file);
+          //  byte[] by=str.getBytes();
+          // output.write(by);
+            OutputStream output = new FileOutputStream("src/ciphertext.txt");
+        }
+        catch(Exception e){
+            e.getStackTrace();
+        }
+
+        for(int i=0; i<256; i++){
+            s[i]= (byte) i;
+            k[i]= key[i%key.length];
+            System.out.println(s[i] + " / "+ (char)k[i]);
         }
 
 
@@ -37,6 +53,31 @@ public class Main {
         //key 길이가 256 일떄.
 
 
+
+    }
+
+    // 16진수 변환.
+    public void printHEX(String st)
+    {
+
+        for(int i = 0; i<st.length(); i++){
+            int ch=(int)st.charAt( i );
+            System.out.format("%04X", ch);
+        }
+
+    }
+
+
+    public void printHEX(byte[] ba)
+    {
+        byte c ;
+
+        for (int i =0;i<ba.length ; i++)
+        {
+
+            c = ba[i];
+            System.out.format("%02X", c);
+        }
 
     }
 
