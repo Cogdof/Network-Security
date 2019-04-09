@@ -38,7 +38,6 @@ public class Main {
         }
 
         int j = 0;
-
         for (int i = 0; i < 256; i++) {
             j = ((j + s[i] + k[i]) % 256);
             swap(i, j);
@@ -59,7 +58,6 @@ public class Main {
                         FileReader fileReader = new FileReader(file);
                         BufferedReader buffer = new BufferedReader(fileReader);
                         OutputStream output = new FileOutputStream("src/cipher_text.txt");
-                        //String line = buffer.readLine();
                         String line = "";
 
                         do {
@@ -102,7 +100,6 @@ public class Main {
                         FileReader fileReader = new FileReader(file);
                         BufferedReader buffer = new BufferedReader(fileReader);
                         OutputStream output = new FileOutputStream("src/decrypt_text.txt");
-                        //String line = buffer.readLine();
                         String line = "";
 
                         do {
@@ -112,14 +109,7 @@ public class Main {
                            // System.out.println(line + "<< cipher_text");
 
                             byte[] decrypt = new java.math.BigInteger(line, 16).toByteArray();      //Hex-> byte[]
-                           // System.out.println(decrypt.toString()+"<< decrypt_text");
 
-                           /*
-                          for (int x = 0; x < decrypt.length; x++) {
-                                System.out.print(decrypt[x] + " ");
-                            }
-                            System.out.println("<< decrypt_text");
-                            */
 
                             byte[] result = decryption(decrypt);
                             //byte[] result = encryption(decrypt);           //같은 동작이다.
@@ -156,36 +146,44 @@ public class Main {
         s[j] = s[i];
     }
 
-    public static byte[] encryption(byte [] plain_line){
-        final byte[] ciphertext = new byte[plain_line.length];
-        int i = 0, j = 0, k, t;
-        byte tmp;
-        for (int counter = 0; counter < plain_line.length; counter++) {
-            i = (i + 1) & 0xFF;
-            j = (j + s[i]) & 0xFF;
+    public static byte[] encryption(byte [] p){
+        byte[] cipherText = new byte[p.length];
+        int i = 0;
+        int j = 0;
+        int k, temp;
+        int count=0;
+
+        while(count!=p.length){      // 암호화 할 문장이 돌아갈 남았을 때 까지.
+            i = (i + 1)%256;
+            j = (j + s[i])%256;
             swap(i, j);
-            t = (s[i] + s[j]) & 0xFF;
-            k = s[t];
-            ciphertext[counter] = (byte) (plain_line[counter] ^ k);
+            temp = (s[i] + s[j]) % 256;
+            k = s[temp];
+            cipherText[count] = (byte) (p[count] ^ k);
+            count++;
         }
-        return ciphertext;
+        return cipherText;
     }
 
     //encryption 이나 Decryption 이나 같은 동작함.
 
-    public static byte[] decryption(byte [] cipher_line){
-        final byte[] ciphertext = new byte[cipher_line.length];
-        int i = 0, j = 0, k, t;
-        byte tmp;
-        for (int counter = 0; counter < cipher_line.length; counter++) {
-            i = (i + 1) & 0xFF;
-            j = (j + s[i]) & 0xFF;
+    public static byte[] decryption(byte [] p){
+        byte[] decryptText = new byte[p.length];
+        int i = 0;
+        int j = 0;
+        int k, temp;
+        int count=0;
+
+        while(count!=p.length){      // 암호화 할 문장이 돌아갈 남았을 때 까지.
+            i = (i + 1)%256;
+            j = (j + s[i])%256;
             swap(i, j);
-            t = (s[i] + s[j]) & 0xFF;
-            k = s[t];
-            ciphertext[counter] = (byte) (cipher_line[counter] ^ k);
+            temp = (s[i] + s[j]) % 256;
+            k = s[temp];
+            decryptText[count] = (byte) (p[count] ^ k);
+            count++;
         }
-        return ciphertext;
+        return decryptText;
 
     }
 }
